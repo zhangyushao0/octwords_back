@@ -1,0 +1,26 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  octwords_back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://myuser:mypassword@postgres/mydb
+    ports:
+      - "50051:50051"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
