@@ -10,6 +10,8 @@ pub enum Error {
     PasswordExecutionError(#[from] argon2::password_hash::Error),
     #[error("Cannot find user: {0}")]
     UserNotFound(String),
+    #[error("Join error: {0}")]
+    JoinError(#[from] tokio::task::JoinError),
 }
 
 pub struct Service {
@@ -26,7 +28,11 @@ impl Service {
         match user {
             Some(user) => {
                 let hash = user.hash_password;
-                match Self::verify_password(password, &hash) {
+                let password = password.to_owned();
+                let is_valid =
+                    tokio::task::spawn_blocking(move || Self::verify_password(&password, &hash))
+                        .await?;
+                match is_valid {
                     Ok(_) => Ok(true),
                     Err(argon2::password_hash::Error::Password) => Ok(false),
                     Err(e) => Err(Error::PasswordExecutionError(e)),
