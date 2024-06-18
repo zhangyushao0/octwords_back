@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          submodules: true # This line ensures submodules are checked out
+          fetch-depth: 0 # This ensures the full history is checked out
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
