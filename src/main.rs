@@ -24,9 +24,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let login_service = LoginServer::new(login_handler);
 
     let word_handler = word::init(db.clone());
-    let new_db = db.clone();
     let word_service_with_auth = WordServer::with_interceptor(word_handler, move |req| {
-        word::init(new_db.clone()).auth_intercept(req)
+        word::init(db.clone()).auth_intercept(req)
     });
     Server::builder()
         .add_service(login_service)

@@ -14,3 +14,9 @@ pub struct Model {
 pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+impl Entity {
+    pub fn find_by_name(name: &str) -> Select<Entity> {
+        Self::find().filter(Column::Name.contains(name))
+    }
+}

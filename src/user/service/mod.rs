@@ -1,7 +1,8 @@
 pub mod jwt;
 pub mod password;
+use crate::entity::user;
+use sea_orm::entity::prelude::*;
 use thiserror::Error;
-
 #[derive(Error, Debug)]
 pub enum Error {
     #[error("Database error: {0}")]
@@ -15,16 +16,16 @@ pub enum Error {
 }
 
 pub struct Service {
-    repository: super::repository::Repository,
+    db: DatabaseConnection,
 }
 
 impl Service {
-    pub fn new(repository: super::repository::Repository) -> Self {
-        Self { repository }
+    pub fn new(db: DatabaseConnection) -> Self {
+        Self { db }
     }
 
     pub async fn verify_user(&self, name: &str, password: &str) -> Result<bool, Error> {
-        let user = self.repository.find_user_by_name(name).await?;
+        let user = user::Entity::find_by_name(name).one(&self.db).await?;
         match user {
             Some(user) => {
                 let hash = user.hash_password;
