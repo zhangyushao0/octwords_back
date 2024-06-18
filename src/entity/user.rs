@@ -10,13 +10,22 @@ pub struct Model {
     pub hash_password: String,
 }
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
-
 impl ActiveModelBehavior for ActiveModel {}
 
 impl Entity {
     pub fn find_by_name(name: &str) -> Select<Entity> {
         Self::find().filter(Column::Name.contains(name))
+    }
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(has_many = "super::learn_event::Entity")]
+    LearnEvent,
+}
+
+impl Related<super::learn_event::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::LearnEvent.def()
     }
 }

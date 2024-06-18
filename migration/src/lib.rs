@@ -1,6 +1,9 @@
+pub use sea_orm_migration::prelude::*;
+
 mod m20240613_000001_users;
 mod m20240613_000002_words;
-use sea_orm_migration::prelude::*;
+mod m20240620_000003_learn_event;
+mod password;
 
 pub struct Migrator;
 
@@ -10,6 +13,7 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20240613_000001_users::Migration),
             Box::new(m20240613_000002_words::Migration),
+            Box::new(m20240620_000003_learn_event::Migration),
         ]
     }
 }

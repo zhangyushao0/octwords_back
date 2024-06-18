@@ -1,6 +1,5 @@
 mod db_setup;
 mod entity;
-mod migrator;
 mod user;
 mod word;
 
