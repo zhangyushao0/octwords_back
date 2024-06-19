@@ -18,13 +18,20 @@ impl Word for Handler {
         match self.service.find_word_by_id(id as i32).await {
             Ok(Some(word)) => Ok(Response::new(WordReply {
                 word: word.word,
-                definition: "word.definition".to_string(),
-                example: "word.example".to_string(),
+                definition: word.definition.unwrap_or_default(),
+                translation: word.translation.unwrap_or_default(),
+                tag: word
+                    .tag
+                    .unwrap_or_default()
+                    .split_whitespace()
+                    .map(|s| s.to_string())
+                    .collect(),
             })),
             Ok(None) => Ok(Response::new(WordReply {
                 word: "".to_string(),
                 definition: "".to_string(),
-                example: "".to_string(),
+                translation: "".to_string(),
+                tag: vec![],
             })),
             Err(e) => Err(Status::internal(e.to_string())),
         }

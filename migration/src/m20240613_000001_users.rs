@@ -1,4 +1,4 @@
-use crate::entity::user;
+use octwords_back_entity::user;
 use sea_orm::{
     sea_query::*, ActiveModelTrait, ActiveValue, Database, EntityName, EntityTrait, Schema,
 };
@@ -20,7 +20,7 @@ impl MigrationTrait for Migration {
         let st = builder.build(&schema.create_table_from_entity(user::Entity));
         manager.get_connection().execute(st).await?;
         let username = "zhangyushao";
-        let hash_password = crate::user::service::Service::hash_password("ling0017").unwrap();
+        let hash_password = crate::password::hash_password("ling0017").unwrap();
         let new_user = user::ActiveModel {
             name: ActiveValue::Set(username.to_owned()),
             hash_password: ActiveValue::Set(hash_password),
