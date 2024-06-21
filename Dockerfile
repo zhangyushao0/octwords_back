@@ -15,7 +15,7 @@ WORKDIR /usr/src/myapp
 COPY Cargo.toml Cargo.lock ./
 
 # 复制 migration 文件夹的 Cargo.toml 文件
-COPY migration/Cargo.toml migration/Cargo.lock migration/
+COPY migration/Cargo.toml migration/
 
 # 为第一次构建预热 Cargo 依赖项
 RUN mkdir src && echo "fn main() {}" > src/main.rs && \
