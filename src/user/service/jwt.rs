@@ -11,9 +11,9 @@ struct Claims {
 const SECRET: &str = "ling0017";
 
 impl super::Service {
-    pub fn create_token(&self, username: &str) -> Result<String, jsonwebtoken::errors::Error> {
+    pub fn create_token(&self, user_id: i32) -> Result<String, jsonwebtoken::errors::Error> {
         let my_claims = Claims {
-            sub: username.to_owned(),
+            sub: user_id.to_string(),
             exp: 10000000000,
         };
         let token = encode(

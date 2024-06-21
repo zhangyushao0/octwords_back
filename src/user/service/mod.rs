@@ -42,4 +42,12 @@ impl Service {
             None => Err(Error::UserNotFound(name.to_owned())),
         }
     }
+
+    pub async fn get_user_id(&self, name: &str) -> Result<i32, Error> {
+        let user = user::Entity::find_by_name(name).one(&self.db).await?;
+        match user {
+            Some(user) => Ok(user.id),
+            None => Err(Error::UserNotFound(name.to_owned())),
+        }
+    }
 }

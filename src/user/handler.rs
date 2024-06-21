@@ -17,10 +17,17 @@ impl Login for Handler {
         let username = req.username;
         let password = req.password;
         match self.service.verify_user(&username, &password).await {
-            Ok(true) => Ok(Response::new(LoginReply {
-                success: true,
-                token: self.service.create_token(&username).unwrap(),
-            })),
+            Ok(true) => {
+                let user_id = self
+                    .service
+                    .get_user_id(&username)
+                    .await
+                    .map_err(|e| Status::internal(e.to_string()))?;
+                Ok(Response::new(LoginReply {
+                    success: true,
+                    token: self.service.create_token(user_id).unwrap(),
+                }))
+            }
             Ok(false) => Ok(Response::new(LoginReply {
                 success: false,
                 token: "".to_string(),

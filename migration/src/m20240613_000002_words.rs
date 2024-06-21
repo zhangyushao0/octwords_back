@@ -52,7 +52,6 @@ pub async fn connect_to_stardict() -> Result<DatabaseConnection, DbErr> {
             .unwrap()
     );
 
-    print!("database_url: {}", database_url);
     let db = Database::connect(&database_url).await?;
 
     Ok(db)
