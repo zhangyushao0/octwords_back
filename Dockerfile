@@ -18,9 +18,11 @@ COPY Cargo.toml Cargo.lock ./
 COPY migration/Cargo.toml migration/
 
 # 为第一次构建预热 Cargo 依赖项
-RUN mkdir src && echo "fn main() {}" > src/main.rs && \
-    mkdir migration/src && echo "fn main() {}" > migration/src/main.rs && \
-    echo "fn main() {}" > src/lib.rs
+RUN mkdir src && \
+    echo "fn main() {}" > src/main.rs && \
+    mkdir migration/src && \
+    echo "fn main() {}" > migration/src/main.rs && \
+    echo "fn main() {}" > src/entity/mod.rs
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # 复制整个 Rust 项目源代码到 Docker 镜像中
