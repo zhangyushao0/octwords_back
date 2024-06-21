@@ -11,8 +11,8 @@ RUN apt-get install -y protobuf-compiler
 # 创建一个新目录来存放 Rust 项目
 WORKDIR /usr/src/myapp
 
-# 复制 Rust 项目中的 Cargo.toml 和 Cargo.lock 文件
-COPY Cargo.toml Cargo.lock ./
+# 复制 Rust 项目中的 Cargo.toml 和 Cargo.lock 文件 和 migration 文件夹
+COPY Cargo.toml Cargo.lock migration ./
 
 # 为第一次构建预热 Cargo 依赖项
 RUN mkdir src && echo "fn main() {}" > src/main.rs
