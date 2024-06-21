@@ -11,11 +11,16 @@ RUN apt-get install -y protobuf-compiler
 # 创建一个新目录来存放 Rust 项目
 WORKDIR /usr/src/myapp
 
-# 复制 Rust 项目中的 Cargo.toml 和 Cargo.lock 文件 和 migration 文件夹
-COPY Cargo.toml Cargo.lock migration ./
+# 复制 Rust 项目中的 Cargo.toml 和 Cargo.lock 文件
+COPY Cargo.toml Cargo.lock ./
+
+# 复制 migration 文件夹的 Cargo.toml 文件
+COPY migration/Cargo.toml migration/Cargo.lock migration/
 
 # 为第一次构建预热 Cargo 依赖项
-RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN mkdir src && echo "fn main() {}" > src/main.rs && \
+    mkdir migration/src && echo "fn main() {}" > migration/src/main.rs && \
+    echo "fn main() {}" > src/lib.rs
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
 # 复制整个 Rust 项目源代码到 Docker 镜像中
