@@ -22,6 +22,7 @@ RUN mkdir src && \
     echo "fn main() {}" > src/main.rs && \
     mkdir migration/src && \
     echo "fn main() {}" > migration/src/main.rs && \
+    mkdir src/entity && \
     echo "fn main() {}" > src/entity/mod.rs
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
